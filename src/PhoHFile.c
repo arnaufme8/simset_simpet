@@ -600,8 +600,8 @@ Boolean PhoHFileWriteDetections(PhoHFileHkTy *hdrHkTyPtr, PHG_Decay *decay,
 	LbUsFourByte		pinkIndex;
 	LbUsOneByte			numBlueAccepted = 0;
 	LbUsOneByte			numPinkAccepted = 0;
-	LbFourByte			firstPos;
-	LbFourByte			secondPos;
+	LbEightByte			firstPos;
+	LbEightByte			secondPos;
 	PHG_DetectedPhoton	detectedPhoton;
 	
 	do { /* Process Loop */

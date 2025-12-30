@@ -110,7 +110,7 @@ typedef 	Boolean BinUsrPETTrackingFType2(PHG_BinParamsTy *binParams, PHG_BinData
 											LbUsFourByte *phiIndex,
 											LbUsFourByte *xrIndex,
 											LbUsFourByte *yrIndex,
-											LbUsFourByte *imageIndex,
+											LbUsEightByte *imageIndex,
 											double		 *coincidenceWt,
 											double		 *coincidenceSqWt);
 typedef 	Boolean BinUsrSPECTTrackingFType(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData,
@@ -125,7 +125,7 @@ typedef 	Boolean BinUsrSPECTTrackingFType2(PHG_BinParamsTy *binParams, PHG_BinDa
 											LbUsFourByte *energyIndex,
 											LbUsFourByte *crystalIndex,
 											LbUsFourByte *zIndex,
-											LbUsFourByte *imageIndex);
+											LbUsEightByte *imageIndex);
 
 /* GLOBALS */
 extern BinUsrParamsFType			*BinUsrInitializeFPtr;

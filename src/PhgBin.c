@@ -123,7 +123,7 @@
 /* Local Prototypes */
 			
 void	phgBinIncrementPETImage(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData,
-			LbUsFourByte imageIndex, PHG_Decay *decay,
+			LbUsEightByte imageIndex, PHG_Decay *decay,
 			PHG_TrackingPhoton *bluePhoton, PHG_TrackingPhoton *pinkPhoton,
 			double coincidenceWeight, double coincidenceSquWeight);
 
@@ -1007,7 +1007,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 {
 	double			weightRatio;		/* Ratio for scaling of pre-existing images */
 	double			weightSquRatio;		/* Ratio for scaling of pre-existing images */
-	LbUsFourByte	imageIndex;			/* Index for processing existing files */
+	LbUsEightByte	imageIndex;			/* Index for processing existing files */
 	Boolean			cleared;			/* Used for checking error status */
 	do {
 	
@@ -1055,7 +1055,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 		if (binParams->doCounts == true) {
 		
 			/* Allocate the image buffer */
-			if ((binData->countImage = LbMmAlloc(binParams->countImageSize))
+			if ((binData->countImage = LbMmAlloc8(binParams->countImageSize))
 					== 0) {
 				break;
 			}			
@@ -1063,7 +1063,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 		if (binParams->doWeights == true) {
 		
 			/* Allocate the image buffer */
-			if ((binData->weightImage = LbMmAlloc(binParams->weightImageSize))
+			if ((binData->weightImage = LbMmAlloc8(binParams->weightImageSize))
 					== 0) {
 				break;
 			}
@@ -1071,7 +1071,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 		if (binParams->doWeightsSquared == true) {
 		
 			/* Allocate the image buffer */
-			if ((binData->weightSquImage = LbMmAlloc(binParams->weightSquImageSize))
+			if ((binData->weightSquImage = LbMmAlloc8(binParams->weightSquImageSize))
 					== 0) {
 				break;
 			}
@@ -1940,7 +1940,7 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 	LbUsFourByte		phiIndex = 0;				/* Index for PHI in 3DRP */
 	LbUsFourByte		xrIndex = 0;				/* Xr index in 3DRP */
 	LbUsFourByte		yrIndex = 0;				/* Yr index in 3DRP */
-	LbUsFourByte		imageIndex = 0;				/* Index for image */
+	LbUsEightByte		imageIndex = 0;				/* Index for image */
 	double				flip;						/* For 3DRP */
 	PHG_TrackingPhoton	bluePhoton;				/* Current blue photon */	
 	PHG_TrackingPhoton	pinkPhoton;				/* Current pink photon */	
@@ -2856,7 +2856,7 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 *
 *********************************************************************************/
 void phgBinIncrementPETImage(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData,
-	LbUsFourByte imageIndex, PHG_Decay *decay,
+	LbUsEightByte imageIndex, PHG_Decay *decay,
 	PHG_TrackingPhoton *bluePhoton, PHG_TrackingPhoton *pinkPhoton, double coincidenceWeight,
 	double coincidenceSquWeight)
 

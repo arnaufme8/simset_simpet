@@ -21,6 +21,14 @@
 *
 *     References:         
 *
+**********************************************
+*
+*		Modified:		24 Jan 2019
+*		Programmer:		R Harrison
+*		Purpose:		Added a function to allocate memory blocks with size
+*						greater than can be allocated with a 4-byte size
+*						(LbMmAlloc8).
+*		 
 **********************************************************************************
 *
 *     Global functions defined:
@@ -61,6 +69,7 @@ LOCALE LbUsFourByte		lbMmTrackNum;			/* Used to track down memory problems */
 void	LbMmCheckTrackNum(void);
 void	LbMmCheckList(void);
 void	*LbMmAlloc(LbUsFourByte bytesToAlloc);
+void	*LbMmAlloc8(LbUsEightByte bytesToAlloc);
 void	LbMmFree(void **memPtr);
 Boolean	LbMmInit(LbUsFourByte flags);
 void	LbMmTerminate(void);

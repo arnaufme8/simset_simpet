@@ -364,7 +364,7 @@ typedef struct {
 	LbUsFourByte	numXRBins;				/* Number of Xr bins */
 	LbUsFourByte	numYRBins;			/* Number of Yr bins */
 	LbUsFourByte	numCrystalBins;		/* Number of crystal bins (in one dimension - square for PET) */
-	LbUsFourByte	numImageBins;		/* Number of bins in the image */
+	LbUsEightByte	numImageBins;		/* Number of bins in the image */
 	LbUsFourByte	scatterRandomParam;	/* Scatter/Random binning parameter indicates how
 											scatter and random coincidences will be binned
 										*/
@@ -476,9 +476,9 @@ typedef struct {
 	LbUsFourByte	crystal1WIsize;		/* Size of bin element for weight image */
 	LbUsFourByte	crystal1WISsize;	/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	countImageSize;		/* Size of the count image buffer */
-	LbUsFourByte	weightImageSize;	/* Size of the weight image buffer */
-	LbUsFourByte	weightSquImageSize;	/* Size of the weight squared image */
+	LbUsEightByte	countImageSize;		/* Size of the count image buffer */
+	LbUsEightByte	weightImageSize;	/* Size of the weight image buffer */
+	LbUsEightByte	weightSquImageSize;	/* Size of the weight squared image */
 	
 	LbUsFourByte	weight_image_type;	/* Type of data for weight image */
 	LbUsFourByte	count_image_type;	/* Type of data for count image */
