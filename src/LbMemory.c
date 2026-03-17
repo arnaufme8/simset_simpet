@@ -20,6 +20,14 @@
 *
 *     References:         
 *
+**********************************************
+*
+*		Modified:		24 Jan 2019
+*		Programmer:		R Harrison
+*		Purpose:		Added a function to allocate memory blocks with size
+*						greater than can be allocated with a 4-byte size
+*						(LbMmAlloc8).
+*		 
 **********************************************************************************
 *
 *     Global functions defined:
@@ -307,6 +315,134 @@ void	* LbMmAlloc(LbUsFourByte bytesToAlloc)
 		}
 	#endif
 }
+
+/*********************************************************************************
+*		LbMmAlloc8
+*
+*	Arguments:
+*			LbUsEightByte	bytesToAlloc	- Size of memory to allocated.
+*
+*	Purpose:	Allocate memory - with an eight byte size, for larger memory
+*				blocks.
+*
+*	Returns:	Ptr to memory block, 0 if failure.
+*
+*********************************************************************************/
+void	* LbMmAlloc8(LbUsEightByte bytesToAlloc)
+{
+	void *newMemPtr;
+	
+	do { /* Process Loop */
+	
+		/* If we are not debuging just allocate and leave */
+		#ifndef LB_DEBUG
+		
+			/* Attempt to allocate the memory */
+			if ((newMemPtr = calloc(1, bytesToAlloc)) == 0){
+				sprintf(lbMmErrStr, "Unable to allocate request for %ld bytes."
+					"\nSystem error number (errno) is %d.\n",
+					(unsigned long)bytesToAlloc, errno);
+				ErStGeneric(lbMmErrStr);
+			}
+			else {
+				/* Clear the memory */
+				memset(newMemPtr, '\0', bytesToAlloc);
+			}
+			return (newMemPtr);
+		#endif
+			
+		#ifdef LB_DEBUG
+		/* Verify we've been initialized */
+		if (!lbMmIsInited) {
+			LbInPrintf("\nYou must initialize the memory manager to call LbMmAlloc.");
+			break;
+		}
+		
+		/* Attempt to allocate the memory */
+		if ((newMemPtr = calloc(1, bytesToAlloc+LBMMCHECKSUM_SIZE)) == 0){
+		
+			/* Create error message, more detail is available if in debug mode */				
+			if (lbMmIsAccounting(lbMmInitFlags)) {
+				sprintf(lbMmErrStr, "Unable to allocate request for %ld bytes.\n"
+					"System error number (errno) is %d.\n"
+					"Current allocation = %ld.\n",
+					(unsigned long)(bytesToAlloc+LBMMCHECKSUM_SIZE), 
+					errno, (unsigned long)lbMmCurBytesAllocated);
+			}
+			else {
+				sprintf(lbMmErrStr, "Unable to allocate request for %ld bytes."
+					"\nSystem error number (errno) is %d.\n",
+					(unsigned long)(bytesToAlloc+LBMMCHECKSUM_SIZE), errno);
+			}
+		}
+		ErStGeneric(lbMmErrStr);
+		break;
+
+		/* Clear the memory */
+		memset(newMemPtr, '\0', bytesToAlloc);
+		
+		/* Set our checksum */
+		tempPtr = (char *)newMemPtr;
+		memcpy((void *)&tempPtr[bytesToAlloc], (void *)lbMmCheckSum, LBMMCHECKSUM_SIZE);
+
+		/* Doing accounting then update structures */
+		if (lbMmIsAccounting(lbMmInitFlags)) {
+				
+			/* Allocate a new instance of the memory list */
+			if ((lbMmNewMemBin = (lbMmMemBinPtr) malloc(sizeof(lbMmMemBinTy))) == 0){
+				sprintf(lbMmErrStr, "Unable to allocate memory list node.");
+				ErStGeneric(lbMmErrStr);
+				break;
+			}
+			
+			/* Store the allocation info */
+			lbMmNewMemBin->thePtr = newMemPtr;
+			lbMmNewMemBin->byteCount = bytesToAlloc;
+			lbMmNewMemBin->allocNumber = lbMmTotNumAllocs + 1;
+			
+			/* If we have set up the tracking bins number then we'll save
+				a reference to this bin in a separate ptr.
+			*/
+			if (lbMmTrackNum == lbMmNewMemBin->allocNumber)
+				lbMmTrackBin = lbMmNewMemBin;
+			
+			/* Add the node to the list */
+			if (lbMmMemList == 0) {
+				lbMmNewMemBin->nextBinPtr = 0;
+				lbMmMemList = lbMmNewMemBin;
+			}
+			else {
+				lbMmNewMemBin->nextBinPtr = lbMmMemList;
+				lbMmMemList = lbMmNewMemBin;
+			}
+			
+			/* Save the allocation number in our secondary list */
+			lbMmAllocNumList[lbMmCurNumAllocs] = lbMmNewMemBin->allocNumber;
+			
+			/* Increment our counters */
+			lbMmCurBytesAllocated += bytesToAlloc;
+			lbMmTotBytesAllocated += bytesToAlloc;
+			lbMmCurNumAllocs++;
+			lbMmTotNumAllocs++;
+			if (lbMmCurBytesAllocated > lbMmMaxResident) {
+				lbMmMaxResident = lbMmCurBytesAllocated;
+			}
+		}
+	#endif
+		
+	} while (false);
+	
+	return (newMemPtr);
+	
+	/* The following call can be jumped to in debugger if necessary */
+	#ifdef LB_DEBUG
+		if (1) {
+			LbMmCheckList();
+			return (newMemPtr);
+		}
+	#endif
+}
+
 /*********************************************************************************
 *		LbMmFree
 *

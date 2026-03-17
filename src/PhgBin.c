@@ -123,7 +123,7 @@
 /* Local Prototypes */
 			
 void	phgBinIncrementPETImage(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData,
-			LbUsFourByte imageIndex, PHG_Decay *decay,
+			LbUsEightByte imageIndex, PHG_Decay *decay,
 			PHG_TrackingPhoton *bluePhoton, PHG_TrackingPhoton *pinkPhoton,
 			double coincidenceWeight, double coincidenceSquWeight);
 
@@ -156,8 +156,8 @@ static	double	phgBinObjDiameter;			/* Image/Object diameter for MSRB */
 Boolean PhgBinInitParams(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_BinFieldsTy *binFields)
 {
 	LbUsFourByte	dimensionIndex;		/* Index for processing dimension calculations */
-	LbUsFourByte	prevSize;			/* Size of current dimension for intialization */
-	LbUsFourByte	prevBins;			/* Number of bins in previous dimension for initialization */
+	LbUsEightByte	prevSize;			/* Size of current dimension for intialization */
+	LbUsEightByte	prevBins;			/* Number of bins in previous dimension for initialization */
 		
 	do { 	/* Process Loop */
 			
@@ -967,6 +967,7 @@ Boolean PhgBinInitParams(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 			binParams->weightSquImageSize *= sizeof(double);
 		}
 		
+		
 		/* Currently the countImageSize contains the number of bins, regardless of if we
 			are doing count images or not. So we'll set our numImageBins according to this.
 		*/
@@ -1007,7 +1008,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 {
 	double			weightRatio;		/* Ratio for scaling of pre-existing images */
 	double			weightSquRatio;		/* Ratio for scaling of pre-existing images */
-	LbUsFourByte	imageIndex;			/* Index for processing existing files */
+	LbUsEightByte	imageIndex;			/* Index for processing existing files */
 	Boolean			cleared;			/* Used for checking error status */
 	do {
 	
@@ -1055,15 +1056,15 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 		if (binParams->doCounts == true) {
 		
 			/* Allocate the image buffer */
-			if ((binData->countImage = LbMmAlloc(binParams->countImageSize))
+			if ((binData->countImage = LbMmAlloc8(binParams->countImageSize))
 					== 0) {
 				break;
 			}			
 		}
 		if (binParams->doWeights == true) {
-		
+            
 			/* Allocate the image buffer */
-			if ((binData->weightImage = LbMmAlloc(binParams->weightImageSize))
+			if ((binData->weightImage = LbMmAlloc8(binParams->weightImageSize))
 					== 0) {
 				break;
 			}
@@ -1071,7 +1072,7 @@ Boolean PhgBinInitialize(char *paramsName, PHG_BinParamsTy *binParams, PHG_BinDa
 		if (binParams->doWeightsSquared == true) {
 		
 			/* Allocate the image buffer */
-			if ((binData->weightSquImage = LbMmAlloc(binParams->weightSquImageSize))
+			if ((binData->weightSquImage = LbMmAlloc8(binParams->weightSquImageSize))
 					== 0) {
 				break;
 			}
@@ -1914,33 +1915,33 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 	double				highZ;					/* Average Z for MSRB */
 	double				xr;						/* xr for MSRB */
 	double				yr;						/* yr for MSRB */
-	LbUsFourByte		lowZIndex = 0;				/* Index of low Z for MSRB */
-	LbUsFourByte		highZIndex = 0;				/* Index of high Z for MSRB */
-	LbUsFourByte		zIndex = 0;					/* LCV for MSRB */
-	LbUsFourByte		blueIndex;				/* Current blue photon */
-	LbUsFourByte		pinkIndex;				/* Current pink index */
-	LbUsFourByte		blueScatters;			/* Number of scatters for current blue photon */
-	LbUsFourByte		pinkScatters;			/* Number of scatters for current pink photon */
+	LbUsEightByte		lowZIndex = 0;				/* Index of low Z for MSRB */
+	LbUsEightByte		highZIndex = 0;				/* Index of high Z for MSRB */
+	LbUsEightByte		zIndex = 0;					/* LCV for MSRB */
+	LbUsEightByte		blueIndex;				/* Current blue photon */
+	LbUsEightByte		pinkIndex;				/* Current pink index */
+	LbUsEightByte		blueScatters;			/* Number of scatters for current blue photon */
+	LbUsEightByte		pinkScatters;			/* Number of scatters for current pink photon */
 	Boolean				ignoreMaxScatters;		/* set true if the scatter/random param is 3,5,8 or 10 */
 	Boolean				ignoreMinScatters;		/* set true if the scatter/random param is 4,5,9 or 10 */
-	LbUsFourByte		angleIndex = 0;				/* Index for angle bin */
-	LbUsFourByte		distIndex = 0;				/* Index for dist bin */
-	LbUsFourByte		tofIndex = 0;				/* Index for time-of-flight bin */
-	LbUsFourByte		scatter1Index = 0;			/* Index for scatter 1 bin */
-	LbUsFourByte		scatter2Index = 0;			/* Index for scatter 2 bin */
-	LbUsFourByte		crystal1Index = 0;			/* Index for crystal 1 bin */
-	LbUsFourByte		crystal2Index = 0;			/* Index for crystal 2 bin */
-	LbUsFourByte		energy1Index = 0;			/* Index for energy 1 bin */
-	LbUsFourByte		energy2Index = 0;			/* Index for energy 2 bin */
-	LbUsFourByte		zDownIndex = 0;				/* Z index for photon having min(blue.y,pink.y) */
-	LbUsFourByte		zUpIndex = 0;				/* Z index for photon having max(blue.y,pink.y) */
-	LbUsFourByte		*z1IndexPtr = 0;			/* Swapping ptr for doing up/down stuff */
-	LbUsFourByte		*z2IndexPtr = 0;			/* Swapping ptr for doing up/down stuff */
-	LbUsFourByte		thetaIndex = 0;				/* Index for theta in 3DRP */
-	LbUsFourByte		phiIndex = 0;				/* Index for PHI in 3DRP */
-	LbUsFourByte		xrIndex = 0;				/* Xr index in 3DRP */
-	LbUsFourByte		yrIndex = 0;				/* Yr index in 3DRP */
-	LbUsFourByte		imageIndex = 0;				/* Index for image */
+	LbUsEightByte		angleIndex = 0;				/* Index for angle bin */
+	LbUsEightByte		distIndex = 0;				/* Index for dist bin */
+	LbUsEightByte		tofIndex = 0;				/* Index for time-of-flight bin */
+	LbUsEightByte		scatter1Index = 0;			/* Index for scatter 1 bin */
+	LbUsEightByte		scatter2Index = 0;			/* Index for scatter 2 bin */
+	LbUsEightByte		crystal1Index = 0;			/* Index for crystal 1 bin */
+	LbUsEightByte		crystal2Index = 0;			/* Index for crystal 2 bin */
+	LbUsEightByte		energy1Index = 0;			/* Index for energy 1 bin */
+	LbUsEightByte		energy2Index = 0;			/* Index for energy 2 bin */
+	LbUsEightByte		zDownIndex = 0;				/* Z index for photon having min(blue.y,pink.y) */
+	LbUsEightByte		zUpIndex = 0;				/* Z index for photon having max(blue.y,pink.y) */
+	LbUsEightByte		*z1IndexPtr = 0;			/* Swapping ptr for doing up/down stuff */
+	LbUsEightByte		*z2IndexPtr = 0;			/* Swapping ptr for doing up/down stuff */
+	LbUsEightByte		thetaIndex = 0;				/* Index for theta in 3DRP */
+	LbUsEightByte		phiIndex = 0;				/* Index for PHI in 3DRP */
+	LbUsEightByte		xrIndex = 0;				/* Xr index in 3DRP */
+	LbUsEightByte		yrIndex = 0;				/* Yr index in 3DRP */
+	LbUsEightByte		imageIndex = 0;				/* Index for image */
 	double				flip;						/* For 3DRP */
 	PHG_TrackingPhoton	bluePhoton;				/* Current blue photon */	
 	PHG_TrackingPhoton	pinkPhoton;				/* Current pink photon */	
@@ -2730,7 +2731,7 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 				/* Convert index to one dimension */
 				imageIndex = (energy2Index * binParams->energy2CIsize) +
 					(energy1Index * binParams->energy1CIsize) +
-					(distIndex * binParams->tdCIsize) + 
+					(distIndex * binParams->tdCIsize) +
 					(tofIndex * binParams->tofCIsize) + 
 					(angleIndex * binParams->aaCIsize) +
 					(zUpIndex * binParams->z2CIsize) +
@@ -2798,7 +2799,7 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 				
 				#ifdef PHG_DEBUG
 					if (imageIndex >= (binParams->numImageBins)) {
-						sprintf(phgBinErrStr,"Invalid imageIndex computed\n"
+						/*sprintf(phgBinErrStr,"Invalid imageIndex computed\n"
 							"\timageIndex = %ld\n"
 							"\tbinParams->numImageBins = %ld"
 							"\tcrystalIndex1 = %ld\n"
@@ -2823,8 +2824,99 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 							 (unsigned long)angleIndex, (unsigned long)zUpIndex,
 							 (unsigned long)zDownIndex, (unsigned long)scatter1Index, 
 							 (unsigned long)scatter2Index, (unsigned long)phiIndex, 
-							 (unsigned long)xrIndex, (unsigned long)yrIndex);
-						
+							 (unsigned long)xrIndex, (unsigned long)yrIndex);*/
+                        
+                        //Added by me:
+						sprintf(phgBinErrStr, "Invalid imageIndex computed:\n\n"
+                            "INDEXES:\n"
+							"\timageIndex = %ld\n"
+							"\tbinParams->numImageBins = %ld\n"
+							"\tcrystalIndex1 = %ld\n"
+							"\tcrystalIndex2 = %ld\n"
+							"\tenergyIndex1 = %ld\n"
+							"\tenergyIndex2 = %ld\n"
+							"\tdistIndex = %ld\n"
+							"\ttofIndex = %ld\n"
+							"\tangleIndex = %ld\n"
+							"\tzIndex1 = %ld\n"
+							"\tzIndex2 = %ld\n"
+							"\tscatterIndex1 = %ld\n"
+							"\tscatterIndex2 = %ld\n"
+							"\tphiIndex = %ld\n"
+							"\txrIndex = %ld\n"
+							"\tyrIndex = %ld\n\n"
+							"BINPARAMS:\n"
+                            "\tbinParams->energy2CIsize = %ld\n"
+                            "\tbinParams->energy1CIsize = %ld\n"
+							"\tbinParams->tdCIsize = %ld\n"
+							"\tbinParams->tofCIsize = %ld\n"
+							"\tbinParams->aaCIsize = %ld\n"
+							"\tbinParams->z2CIsize = %ld\n"
+							"\tbinParams->z1CIsize = %ld\n"
+							"\tbinParams->scatter2CIsize = %ld\n"
+							"\tbinParams->scatter1CIsize = %ld\n"
+							"\tbinParams->crystal2CIsize = %ld\n"
+							"\tbinParams->crystal1CIsize = %ld\n"
+							"\tbinParams->phiCIsize = %ld\n"
+							"\tbinParams->thetaCIsize = %ld\n"
+							"\tbinParams->xrCIsize = %ld\n"
+							"\tbinParams->yrCIsize = %ld\n"
+							"\tbinParams->numImageBins = %ld\n"
+							"\tbinParams->countImageSize = %ld\n\n"
+                            "OTHERS:\n"
+                            "\tbinParams->numDimensions = %ld\n\n"
+                            
+							"\n in (PhgBinPETPhotons)\n",
+							 (unsigned long)imageIndex, (unsigned long)binParams->numImageBins, 
+							 (unsigned long)crystal1Index, (unsigned long)crystal2Index, 
+							 (unsigned long)energy1Index, (unsigned long)energy2Index,
+							 (unsigned long)distIndex, (unsigned long)tofIndex, 
+							 (unsigned long)angleIndex, (unsigned long)zUpIndex,
+							 (unsigned long)zDownIndex, (unsigned long)scatter1Index, 
+							 (unsigned long)scatter2Index, (unsigned long)phiIndex, 
+							 (unsigned long)xrIndex, (unsigned long)yrIndex,
+							 (unsigned long)binParams->energy2CIsize, (unsigned long)binParams->energy1CIsize, 
+							 (unsigned long)binParams->tdCIsize, (unsigned long)binParams->tofCIsize, 
+							 (unsigned long)binParams->aaCIsize, 
+							 (unsigned long)binParams->z2CIsize, (unsigned long)binParams->z1CIsize,
+							 (unsigned long)binParams->scatter2CIsize, (unsigned long)binParams->scatter1CIsize, 
+							 (unsigned long)binParams->crystal2CIsize, (unsigned long)binParams->crystal1CIsize, 
+							 (unsigned long)binParams->phiCIsize,(unsigned long)binParams->thetaCIsize, 
+							 (unsigned long)binParams->xrCIsize, (unsigned long)binParams->yrCIsize, 
+							 (unsigned long)binParams->numImageBins, (unsigned long)binParams->countImageSize,
+                             (unsigned long)binParams->numDimensions
+                               );
+                        
+                        
+                        /*sprintf(phgBinErrStr, "BINPARAMS\n"
+							"\tbinParams->energy2SCIsize = %ld\n"
+							"\tbinParams->energy1CIsize = %ld"
+							"\tbinParams->tdCIsize = %ld\n"
+							"\tbinParams->tofCIsize = %ld\n"
+							"\tbinParams->aaCIsize = %ld\n"
+							"\tbinParams->z2CIsize = %ld\n"
+							"\tbinParams->z1CIsize = %ld\n"
+							"\tbinParams->scatter2CIsize = %ld\n"
+							"\tbinParams->scatter1CIsize = %ld\n"
+							"\tbinParams->crystal2CIsize = %ld\n"
+							"\tbinParams->crystal1CIsize = %ld\n"
+							"\tbinParams->phiCIsize = %ld"
+							"\tbinParams->thetaCIsize = %ld"
+							"\tbinParams->xrCIsize = %ld"
+							"\tbinParams->yrCIsize = %ld"
+							"\tbinParams->numImageBins = %ld"
+                            "\tbinParams->countImageSize = %ld"
+							"\n in (PhgBinPETPhotons)\n",
+							 (unsigned long)binParams->aaCIsize, (unsigned long)binParams->aaCIsize, 
+							 (unsigned long)binParams->tdCIsize, (unsigned long)binParams->tofCIsize, 
+							 (unsigned long)binParams->aaCIsize, (unsigned long)binParams->z2CIsize,
+							 (unsigned long)binParams->z1CIsize, (unsigned long)binParams->scatter2CIsize, 
+							 (unsigned long)binParams->scatter1CIsize, (unsigned long)binParams->crystal2CIsize, (unsigned long)binParams->crystal1CIsize,
+							 (unsigned long)binParams->phiCIsize, (unsigned long)binParams->thetaCIsize, 
+							 (unsigned long)binParams->xrCIsize, (unsigned long)binParams->yrCIsize, 
+							 (unsigned long)binParams->numImageBins, (unsigned long)binParams->countImageSize);*/
+                        
+                        
 						PhgAbort(phgBinErrStr,true);
 
 					}
@@ -2856,7 +2948,7 @@ void PhgBinPETPhotons(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_Bi
 *
 *********************************************************************************/
 void phgBinIncrementPETImage(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData,
-	LbUsFourByte imageIndex, PHG_Decay *decay,
+	LbUsEightByte imageIndex, PHG_Decay *decay,
 	PHG_TrackingPhoton *bluePhoton, PHG_TrackingPhoton *pinkPhoton, double coincidenceWeight,
 	double coincidenceSquWeight)
 
@@ -3650,7 +3742,7 @@ void PhgBinPrintReport(	PHG_BinParamsTy *binParams,
 void PhgBinTerminate(PHG_BinParamsTy *binParams, PHG_BinDataTy *binData, PHG_BinFieldsTy *binFields)
 {
 	Boolean			okay = false;	/* Process Flag */
-	LbUsFourByte	i;				/* Loop control */
+	LbUsEightByte	i;				/* Loop control */
 	float			singlePrec;		/* For converting output */
 	
 	do { /* Process Loop */

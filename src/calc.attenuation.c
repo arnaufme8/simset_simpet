@@ -302,7 +302,7 @@ Boolean ClcAtnCalcAttenuation(void	**atnAry)
 		}
 		
 		/* Allocate d/a array */
-		if ((*atnAry = LbMmAlloc(PhgBinParams[0].weightImageSize))
+		if ((*atnAry = LbMmAlloc8(PhgBinParams[0].weightImageSize))
 				== 0){
 			break;
 		}
@@ -534,7 +534,7 @@ void clcAtnCalcProjection(Boolean doAverage)
 	double					x0, y0, s, d1, d2, x1, x2, y1, y2;
 	double					tempDist;				/* Temporary distance */
 	double					cosAlpha, sineAlpha;
-	LbFourByte				imageIndex;				/* Computed index for image */
+	LbEightByte				imageIndex;				/* Computed index for image */
 	PHG_TrackingPhoton		trackingPhoton;			/* The tracking photon */
 	PHG_Position			tempPos;				/* Temp position for testing */
 	

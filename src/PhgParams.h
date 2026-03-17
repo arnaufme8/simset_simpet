@@ -350,22 +350,22 @@ typedef enum {	PhgBinEn_Null,
 
 typedef struct {
 	LbFourByte		numDimensions;		/* Number of dimensions user has specified */
-	LbUsFourByte	numZBins;			/* Number of z bins */
-	LbUsFourByte	numPABins;			/* Number of polar axis bins */
-	LbUsFourByte	numTDBins;			/* Number of transaxial distance bins */
-	LbUsFourByte	numAABins;			/* Number of azimuthal angle bins */
-	LbUsFourByte	numTOFBins;			/* Number of time-of-flight bins */
-	LbUsFourByte	numE1Bins;			/* Number of photon 1 energy bins */
-	LbUsFourByte	numE2Bins;			/* Number of photon 2 energy bins */
-	LbUsFourByte	numS1Bins;			/* Number of photon 1 scatter bins */
-	LbUsFourByte	numS2Bins;			/* Number of photon 2 scatter bins */
-	LbUsFourByte	numPHIBins;			/* Number of azimuthal angles */
-	LbUsFourByte	numThetaBins;			/* Number of elevation angles */
-	LbUsFourByte	numXRBins;				/* Number of Xr bins */
-	LbUsFourByte	numYRBins;			/* Number of Yr bins */
-	LbUsFourByte	numCrystalBins;		/* Number of crystal bins (in one dimension - square for PET) */
-	LbUsFourByte	numImageBins;		/* Number of bins in the image */
-	LbUsFourByte	scatterRandomParam;	/* Scatter/Random binning parameter indicates how
+	LbUsEightByte	numZBins;			/* Number of z bins */
+	LbUsEightByte	numPABins;			/* Number of polar axis bins */
+	LbUsEightByte	numTDBins;			/* Number of transaxial distance bins */
+	LbUsEightByte	numAABins;			/* Number of azimuthal angle bins */
+	LbUsEightByte	numTOFBins;			/* Number of time-of-flight bins */
+	LbUsEightByte	numE1Bins;			/* Number of photon 1 energy bins */
+	LbUsEightByte	numE2Bins;			/* Number of photon 2 energy bins */
+	LbUsEightByte	numS1Bins;			/* Number of photon 1 scatter bins */
+	LbUsEightByte	numS2Bins;			/* Number of photon 2 scatter bins */
+	LbUsEightByte	numPHIBins;			/* Number of azimuthal angles */
+	LbUsEightByte	numThetaBins;			/* Number of elevation angles */
+	LbUsEightByte	numXRBins;				/* Number of Xr bins */
+	LbUsEightByte	numYRBins;			/* Number of Yr bins */
+	LbUsEightByte	numCrystalBins;		/* Number of crystal bins (in one dimension - square for PET) */
+	LbUsEightByte	numImageBins;		/* Number of bins in the image */
+	LbUsEightByte	scatterRandomParam;	/* Scatter/Random binning parameter indicates how
 											scatter and random coincidences will be binned
 										*/
 										
@@ -412,73 +412,73 @@ typedef struct {
 	double			xrRange;			/* Range of X r values */
 	double			yrRange;			/* Range of Y r values */
 	
-	LbUsFourByte	scatter2CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	scatter2WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	scatter2WISsize;	/* Size of bin element for weight squared image */
+	LbUsEightByte	scatter2CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	scatter2WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	scatter2WISsize;	/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	scatter1CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	scatter1WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	scatter1WISsize;	/* Size of bin element for weight squared image */
+	LbUsEightByte	scatter1CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	scatter1WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	scatter1WISsize;	/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	energy2CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	energy2WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	energy2WISsize;		/* Size of bin element for weight squared image */
+	LbUsEightByte	energy2CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	energy2WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	energy2WISsize;		/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	energy1CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	energy1WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	energy1WISsize;		/* Size of bin element for weight squared image */
+	LbUsEightByte	energy1CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	energy1WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	energy1WISsize;		/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	aaCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	aaWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	aaWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	aaCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	aaWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	aaWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	tdCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	tdWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	tdWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	tdCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	tdWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	tdWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	tofCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	tofWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	tofWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	tofCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	tofWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	tofWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	paCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	paWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	paWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	paCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	paWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	paWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	z2CIsize;			/* Size of bin element for count image */
-	LbUsFourByte	z2WIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	z2WISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	z2CIsize;			/* Size of bin element for count image */
+	LbUsEightByte	z2WIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	z2WISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	z1CIsize;			/* Size of bin element for count image */
-	LbUsFourByte	z1WIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	z1WISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	z1CIsize;			/* Size of bin element for count image */
+	LbUsEightByte	z1WIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	z1WISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	phiCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	phiWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	phiWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	phiCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	phiWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	phiWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	thetaCIsize;		/* Size of bin element for count image */
-	LbUsFourByte	thetaWIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	thetaWISsize;		/* Size of bin element for weight squared image */
+	LbUsEightByte	thetaCIsize;		/* Size of bin element for count image */
+	LbUsEightByte	thetaWIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	thetaWISsize;		/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	xrCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	xrWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	xrWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	xrCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	xrWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	xrWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	yrCIsize;			/* Size of bin element for count image */
-	LbUsFourByte	yrWIsize;			/* Size of bin element for weight image */
-	LbUsFourByte	yrWISsize;			/* Size of bin element for weight squared image */
+	LbUsEightByte	yrCIsize;			/* Size of bin element for count image */
+	LbUsEightByte	yrWIsize;			/* Size of bin element for weight image */
+	LbUsEightByte	yrWISsize;			/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	crystal2CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	crystal2WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	crystal2WISsize;	/* Size of bin element for weight squared image */
+	LbUsEightByte	crystal2CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	crystal2WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	crystal2WISsize;	/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	crystal1CIsize;		/* Size of bin element for count image */
-	LbUsFourByte	crystal1WIsize;		/* Size of bin element for weight image */
-	LbUsFourByte	crystal1WISsize;	/* Size of bin element for weight squared image */
+	LbUsEightByte	crystal1CIsize;		/* Size of bin element for count image */
+	LbUsEightByte	crystal1WIsize;		/* Size of bin element for weight image */
+	LbUsEightByte	crystal1WISsize;	/* Size of bin element for weight squared image */
 	
-	LbUsFourByte	countImageSize;		/* Size of the count image buffer */
-	LbUsFourByte	weightImageSize;	/* Size of the weight image buffer */
-	LbUsFourByte	weightSquImageSize;	/* Size of the weight squared image */
+	LbUsEightByte	countImageSize;		/* Size of the count image buffer */
+	LbUsEightByte	weightImageSize;	/* Size of the weight image buffer */
+	LbUsEightByte	weightSquImageSize;	/* Size of the weight squared image */
 	
 	LbUsFourByte	weight_image_type;	/* Type of data for weight image */
 	LbUsFourByte	count_image_type;	/* Type of data for count image */
